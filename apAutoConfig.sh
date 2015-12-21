@@ -6,8 +6,6 @@
 #anonomizing access point. 
 
 
-echo "Welcome to the future of anonymity!"
-
 sudo ifdown wlan0
 
 echo "Updating system software..."
