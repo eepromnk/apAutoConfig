@@ -52,8 +52,10 @@ sudo sed -i -e "\$aaddress 192.168.42.1" /etc/network/interfaces
 sudo sed -i -e "\$anetmask 255.255.255.0" /etc/network/interfaces
 sudo sed -i -e "\$aup iptables-restore < /etc/iptables.ipv4.nat" /etc/network/interfaces
 
+##Set static IP##
 sudo ifconfig wlan0 192.168.42.1
 
+##Configure hostapd##
 echo > /etc/hostapd/hostapd.conf
 sudo sed -i -e "1i interface=wlan0" /etc/hostapd/hostapd.conf
 sudo sed -i -e "2i driver=nl80211" /etc/hostapd/hostapd.conf
@@ -69,4 +71,17 @@ sudo sed -i -e "11i wpa_key_mgmt=WPA-PSK" /etc/hostapd/hostapd.conf
 sudo sed -i -e "12i wpa_pairwise=TKIP" /etc/hostapd/hostapd.conf
 sudo sed -i -e "13i rsn_pairwise=CCMP" /etc/hostapd/hostapd.conf
 
- 
+##Set defaults##
+sudo sed -i 's\#DAEMON_CONF=""\DAEMON_CONF="/etc/hostapd/hostapd.conf"\' /etc/default/hostapd
+sudo sed -i -e "\$anet.ipv4.ip_forward=1" /etc/sysctl.conf
+
+##Activate NAT##
+sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+
+##Set ip forwarding##
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
+
+##Save ip tables for next boot##
+sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
