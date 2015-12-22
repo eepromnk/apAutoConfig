@@ -19,7 +19,7 @@ sudo apt-get install hostapd isc-dhcp-server sed
 host1=google.com
 host2=wikipedia.org
 
-#Uncomment before running. The nested case statment breaks Sublime Text's syntax highlighter.
+#Uncomment before running. The nested case statment breaks Sublime Text's syntax highlighter. I commented this out for my own sanity.
 #((ping -w5 -c3 $host1 || ping -w5 -c3 $host2) > /dev/null 2>&1) && echo "Internet connectivity - OK" || (echo "Internet connectivity - Down, Internet connectivity is required for this script to complete. exiting..." && exit 1)
 
 
