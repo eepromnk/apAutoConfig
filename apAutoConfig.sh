@@ -6,7 +6,7 @@
 #anonomizing access point. 
 
 
-sudo ifdown wlan0
+#sudo ifdown wlan0
 
 echo "Updating system software..."
 #sudo apt-get update 
@@ -35,15 +35,15 @@ echo "Installing hostapd and the dhcp server..."
 #sudo sed -i 's/option domain-name-servers ns1.example.org, ns2.example.org;/#option domain-name-servers ns1.example.org, ns2.example.org;/' /etc/dhcp/dhcpd.conf
 #sudo sed -i 's/#authoritative;/authoritative;/' /etc/dhcp/dhcpd.conf
 
-#sudo sed -i -e "\$asubnet 192.168.42.0 netmask 255.255.255.0 {" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$arange 192.168.42.10 192.168.42.50;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$aoption broadcast-address 192.168.42.255;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$aoption routers 192.168.42.1;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$adefault-lease-time 600;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$amax-lease-time 7200;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$aoption domain-name "local";" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$aoption domain-name-servers 8.8.8.8, 8.8.4.4;" /etc/dhcp/dhcpd.conf
-#sudo sed -i -e "\$a}" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$asubnet 192.168.42.0 netmask 255.255.255.0 {" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$arange 192.168.42.10 192.168.42.50;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$aoption broadcast-address 192.168.42.255;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$aoption routers 192.168.42.1;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$adefault-lease-time 600;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$amax-lease-time 7200;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$aoption domain-name "local";" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$aoption domain-name-servers 8.8.8.8, 8.8.4.4;" /etc/dhcp/dhcpd.conf
+#sudo sed -i "\$a}" /etc/dhcp/dhcpd.conf
 
 ########################
 ##Configure Interfaces##
@@ -56,7 +56,21 @@ sudo sed -i -e "\$aaddress 192.168.42.1" /etc/network/interfaces
 sudo sed -i -e "\$anetmask 255.255.255.0" /etc/network/interfaces
 sudo sed -i -e "\$aup iptables-restore < /etc/iptables.ipv4.nat" /etc/network/interfaces
 
-sudo ifconfig wlan0 192.168.42.1
+#sudo ifconfig wlan0 192.168.42.1
 
+echo > /etc/hostapd/hostapd.conf
+sudo sed -i -e "1i interface=wlan0" /etc/hostapd/hostapd.conf
+sudo sed -i -e "2i driver=nl80211" /etc/hostapd/hostapd.conf
+sudo sed -i -e "3i ssid=onionpi" /etc/hostapd/hostapd.conf
+sudo sed -i -e "4i hw_mode=g" /etc/hostapd/hostapd.conf
+sudo sed -i -e "5i channel=6" /etc/hostapd/hostapd.conf
+sudo sed -i -e "6i macaddr_acl=0" /etc/hostapd/hostapd.conf
+sudo sed -i -e "7i auth_algs=1" /etc/hostapd/hostapd.conf
+sudo sed -i -e "8i ignore_broadcast_ssid=0" /etc/hostapd/hostapd.conf
+sudo sed -i -e "9i wpa=2" /etc/hostapd/hostapd.conf
+sudo sed -i -e "10i wpa_passphrase=Raspberry" /etc/hostapd/hostapd.conf
+sudo sed -i -e "11i wpa_key_mgmt=WPA-PSK" /etc/hostapd/hostapd.conf
+sudo sed -i -e "12i wpa_pairwise=TKIP" /etc/hostapd/hostapd.conf
+sudo sed -i -e "13i rsn_pairwise=CCMP" /etc/hostapd/hostapd.conf
 
-
+ 
