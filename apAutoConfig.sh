@@ -15,12 +15,12 @@ echo "Installing hostapd and the dhcp server..."
 sudo apt-get install hostapd isc-dhcp-server sed
 
 
-#Test internet connection
+Test internet connection
 host1=google.com
 host2=wikipedia.org
 
-#Uncomment before running. The nested case statment breaks Sublime Text's syntax highlighter. I commented this out for my own sanity.
-#((ping -w5 -c3 $host1 || ping -w5 -c3 $host2) > /dev/null 2>&1) && echo "Internet connectivity - OK" || (echo "Internet connectivity - Down, Internet connectivity is required for this script to complete. exiting..." && exit 1)
+
+((ping -w5 -c3 $host1 || ping -w5 -c3 $host2) > /dev/null 2>&1) && echo "Internet connectivity - OK" || (echo "Internet connectivity - Down, Internet connectivity is required for this script to complete. exiting..." && exit 1)
 
 
 ###############################
@@ -55,7 +55,7 @@ sudo sed -i -e "\$aup iptables-restore < /etc/iptables.ipv4.nat" /etc/network/in
 ##Set static IP##
 sudo ifconfig wlan0 192.168.42.1
 
-##Configure hostapd##
+##Create and configure hostapd##
 echo > /etc/hostapd/hostapd.conf
 sudo sed -i -e "1i interface=wlan0" /etc/hostapd/hostapd.conf
 sudo sed -i -e "2i driver=nl80211" /etc/hostapd/hostapd.conf
@@ -85,3 +85,42 @@ sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
 
 ##Save ip tables for next boot##
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+
+
+######################
+## tor configuraton ##
+######################
+
+echo "Installing tor..."
+sudo apt-get --yes install tor
+
+##Configure torrc##
+sudo sed -i -e "15i Log notice file /var/log/tor/notices.log\n" /etc/tor/torrc
+sudo sed -i -e "16i VirtualAddrNetwork 10.192.0.0/10" /etc/tor/torrc
+sudo sed -i -e "17i AutomapHostsSuffixes .onion,.exit" /etc/tor/torrc
+sudo sed -i -e "18i AutomapHostsOnResolve 1" /etc/tor/torrc
+sudo sed -i -e "19i TransPort 9040" /etc/tor/torrc
+sudo sed -i -e "20i TransListenAddress 192.168.42.1" /etc/tor/torrc
+sudo sed -i -e "21i DNSPort 53" /etc/tor/torrc
+sudo sed -i -e "22i DNSListenAddress 192.168.42.1" /etc/tor/torrc
+
+##Flush old ip NAT table##
+sudo iptables -F
+sudo iptables -t nat -F
+
+##Make an exception to allow ssh##
+sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --dport 22 -j REDIRECT --to-ports 22
+
+##DNS routing##
+sudo iptables -t nat -A PREROUTING -i wlan0 -p udp --dport 53 -j REDIRECT --to-ports 53
+
+##TCP routing##
+sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --syn -j REDIRECT --to-ports 9040
+
+##Save configuration to NAT table##
+sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+
+##Creat log files##
+sudo touch /var/log/tor/notices.log
+sudo chown debian-tor /var/log/tor/notices.log
+sudo chmod 644 /var/log/tor/notices.log
