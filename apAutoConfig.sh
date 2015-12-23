@@ -15,7 +15,7 @@ echo "Installing hostapd and the dhcp server..."
 sudo apt-get install hostapd isc-dhcp-server sed
 
 
-Test internet connection
+#Test internet connection
 host1=google.com
 host2=wikipedia.org
 
