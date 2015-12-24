@@ -1,6 +1,6 @@
 # apAutoConfig
 
-This bash script configures a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/) as an anonymizing tor proxy. It can also be used as a simple wifi hotspot by commenting out or deleting everything below the "tor configuration" comment in apAutoConfig.sh.
+This bash script configures a [Raspberry Pi](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/) as an anonymizing tor proxy. It can also be used as a simple wifi hotspot by commenting out or deleting everything below the "tor configuration" comment in `apAutoConfig.sh`.
 
 The script downloads, installs, and configures three pieces of software: hostapd, isc-hdcp-server, and tor. This script has only been tested on a [Raspberry Pi 2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/) running a clean install of [Kali Linux](https://www.offensive-security.com/kali-linux-vmware-arm-image-download/) with a [Realtek 5370](http://www.amazon.com/gp/aw/d/B00GFAN498/ref=psd_mlt_nbc_B00ABD4AXO_ri) wifi dongle, but there's no reason it shouldn't work with [Raspbian](https://www.raspbian.org/) and any wireless chipset based on the nl80211 driver. Refer to the [wiki](http://elinux.org/RPi_USB_Wi-Fi_Adapters) for a complete list of supported chipsets.
 
