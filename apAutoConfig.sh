@@ -12,7 +12,7 @@ echo "Updating system software..."
 sudo apt-get update 
 
 echo "Installing hostapd and the dhcp server..."
-sudo apt-get install hostapd isc-dhcp-server sed
+sudo apt-get --yes install hostapd isc-dhcp-server sed
 
 
 #Test internet connection
@@ -124,3 +124,5 @@ sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 sudo touch /var/log/tor/notices.log
 sudo chown debian-tor /var/log/tor/notices.log
 sudo chmod 644 /var/log/tor/notices.log
+
+sudo restart
