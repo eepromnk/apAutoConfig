@@ -120,7 +120,7 @@ sudo iptables -t nat -A PREROUTING -i wlan0 -p tcp --syn -j REDIRECT --to-ports 
 ##Save configuration to NAT table##
 sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 
-##Creat log files##
+##Create log files##
 sudo touch /var/log/tor/notices.log
 sudo chown debian-tor /var/log/tor/notices.log
 sudo chmod 644 /var/log/tor/notices.log
