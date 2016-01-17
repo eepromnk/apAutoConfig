@@ -125,4 +125,8 @@ sudo touch /var/log/tor/notices.log
 sudo chown debian-tor /var/log/tor/notices.log
 sudo chmod 644 /var/log/tor/notices.log
 
+sudo update-rc.d hostapd enable
+sudo update-rc.d isc-dhcp-server enable
+sudo update-rc.d tor enable
+
 sudo restart
