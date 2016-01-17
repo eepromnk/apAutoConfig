@@ -11,16 +11,4 @@ There are no prompts for user input during configuration as this script was writ
 # Notes
 In order to make `apAutoConfig.sh` executable you must place it into /bin on your Raspberry Pi, fire up a command prompt, and run `chmod +x apAutoConfig.sh`. After that simply type apAutoConfig.sh into your command prompt and hit enter.
 
-After running `apAutoConfig.sh` your Raspberry Pi will restart. Afterwords, open a command prompt and enter:
 
-	sudo service hostapd start
-	sudo service isc-dhcp-server start
-	sudo service tor start
-
-If you'd like to avoid entering the above commands *every time* you turn on your Raspberry Pi, open a command prompt and enter:
-
-	sudo update-rc.d hostapd enable
-	sudo update-rc.d isc-dhcp-server enable
-	sudo update-rc.d tor enable
-	 
-*I have not tested the auto-run commands above. Let me know if they don't work and I'll make corrections*
